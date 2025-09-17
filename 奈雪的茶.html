@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奈雪的茶 - 性格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            color: #2d4a2d;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.15);
+            border: 2px solid #e0f2e0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid #4caf50;
+        }
+        
+        .header h1 {
+            color: #2e7d32;
+            font-size: 36px;
+            margin-bottom: 12px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .header p {
+            color: #558b55;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0f2e0;
+            border-radius: 10px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #8bc34a);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .question {
+            background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 25px;
+            border-left: 5px solid #4caf50;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.08);
+        }
+        
+        .question h3 {
+            margin-bottom: 18px;
+            color: #33691e;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .options label {
+            display: block;
+            padding: 16px 20px;
+            margin: 12px 0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e8f5e9;
+            font-weight: 500;
+        }
+        
+        .options label:hover {
+            border-color: #4caf50;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.15);
+            background: #f1f8e9;
+        }
+        
+        .options input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+            accent-color: #4caf50;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 35px auto;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(76, 175, 80, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(76, 175, 80, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .result {
+            text-align: center;
+            display: none;
+            padding: 40px;
+            background: linear-gradient(135deg, #f1f8e9 0%, #ffffff 100%);
+            border-radius: 25px;
+            margin-top: 25px;
+            border: 3px solid #c8e6c9;
+        }
+        
+        .result h2 {
+            color: #2e7d32;
+            font-size: 32px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .tea-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 25px;
+            object-fit: cover;
+            margin: 25px auto;
+            border: 4px solid #c8e6c9;
+            background: linear-gradient(45deg, #e8f5e9, #ffffff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+        }
+        
+        .match-score {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4caf50;
+            margin: 20px 0;
+            background: #e8f5e9;
+            padding: 12px 25px;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        
+        .personality-traits {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        .trait {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .tea-description {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 18px;
+            margin: 25px 0;
+            font-style: italic;
+            color: #33691e;
+            border-left: 5px solid #4caf50;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .question-counter {
+            text-align: center;
+            color: #558b55;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 15px;
+                border-radius: 20px;
+            }
+            
+            .header h1 {
+                font-size: 30px;
+            }
+            
+            .question {
+                padding: 22px;
+            }
+            
+            .tea-image {
+                width: 140px;
+                height: 140px;
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍵 奈雪的茶 - 性格测试</h1>
+            <p>完成10道测试题，发现你的专属奈雪饮品！</p>
+        </div>
+
+        <div class="question-counter" id="questionCounter">问题 1/10</div>
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+
+        <form id="personalityTest">
+            <!-- 问题1 -->
+            <div class="question">
+                <h3>1. 周末你更喜欢如何度过？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question1" value="A" required> A. 和朋友一起聚会热闹</label>
+                    <label><input type="radio" name="question1" value="B"> B. 户外运动或健身</label>
+                    <label><input type="radio" name="question1" value="C"> C. 在家看书或看电影</label>
+                    <label><input type="radio" name="question1" value="D"> D. 尝试新的餐厅或咖啡馆</label>
+                </div>
+            </div>
+
+            <!-- 问题2 -->
+            <div class="question">
+                <h3>2. 你最喜欢的社交平台是？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question2" value="A" required> A. 抖音 - 喜欢短视频的活力</label>
+                    <label><input type="radio" name="question2" value="B"> B. 小红书 - 关注健康生活方式</label>
+                    <label><input type="radio" name="question2" value="C"> C. 微信 - 保持与亲友的深度联系</label>
+                    <label><input type="radio" name="question2" value="D"> D. Instagram - 分享精致生活</label>
+                </div>
+            </div>
+
+            <!-- 问题3 -->
+            <div class="question">
+                <h3>3. 选择旅行目的地时，你更看重？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question3" value="A" required> A. 热闹有趣的主题公园</label>
+                    <label><input type="radio" name="question3" value="B"> B. 自然风光和户外探险</label>
+                    <label><input type="radio" name="question3" value="C"> C. 历史文化遗址</label>
+                    <label><input type="radio" name="question3" value="D"> D. 网红打卡地和美食</label>
+                </div>
+            </div>
+
+            <!-- 问题4 -->
+            <div class="question">
+                <h3>4. 朋友通常如何描述你？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question4" value="A" required> A. 派对的生命力</label>
+                    <label><input type="radio" name="question4" value="B"> B. 充满正能量</label>
+                    <label><input type="radio" name="question4" value="C"> C. 温暖可靠</label>
+                    <label><input type="radio" name="question4" value="D"> D. 有品味有格调</label>
+                </div>
+            </div>
+
+            <!-- 问题5 -->
+            <div class="question">
+                <h3>5. 你最近关注的流行趋势是？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question5" value="A" required> A. 最新的网络热梗和挑战</label>
+                    <label><input type="radio" name="question5" value="B"> B. 健康饮食和运动方式</label>
+                    <label><input type="radio" name="question5" value="C"> C. 治愈系影视和音乐</label>
+                    <label><input type="radio" name="question5" value="D"> D. 时尚穿搭和美妆技巧</label>
+                </div>
+            </div>
+
+            <!-- 问题6 -->
+            <div class="question">
+                <h3>6. 你的工作/学习风格更接近？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question6" value="A" required> A. 高效直接，追求结果</label>
+                    <label><input type="radio" name="question6" value="B"> B. 有计划有步骤，注重细节</label>
+                    <label><input type="radio" name="question6" value="C"> C. 创意无限，喜欢尝试新方法</label>
+                    <label><input type="radio" name="question6" value="D"> D. 团队合作，善于沟通协调</label>
+                </div>
+            </div>
+
+            <!-- 问题7 -->
+            <div class="question">
+                <h3>7. 你最喜欢的颜色系列是？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question7" value="A" required> A. 红色/橙色 - 热情活力</label>
+                    <label><input type="radio" name="question7" value="B"> B. 蓝色/绿色 - 自然清新</label>
+                    <label><input type="radio" name="question7" value="C"> C. 粉色/紫色 - 浪漫梦幻</label>
+                    <label><input type="radio" name="question7" value="D"> D. 黑白灰 - 简约经典</label>
+                </div>
+            </div>
+
+            <!-- 问题8 -->
+            <div class="question">
+                <h3>8. 面对挑战时，你的态度是？</h3>
+                <div class="options">
+                           <label><input type="radio" name="question8" value="A" required> A. 兴奋迎接，越战越勇</label>
+                    <label><input type="radio" name="question8" value="B"> B. 冷静分析，制定计划</label>
+                    <label><input type="radio" name="question8" value="C"> C. 寻求帮助，团队协作</label>
+                    <label><input type="radio" name="question8" value="D"> D. 灵活应对，随机应变</label>
+                </div>
+            </div>
+
+            <!-- 问题9 -->
+            <div class="question">
+                <h3>9. 你理想中的休闲时光是？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question9" value="A" required> A. 和朋友畅聊欢笑</label>
+                    <label><input type="radio" name="question9" value="B"> B. 独自享受宁静时光</label>
+                    <label><input type="radio" name="question9" value="C"> C. 探索新奇有趣的事物</label>
+                    <label><input type="radio" name="question9" value="D"> D. 陪伴家人温馨相处</label>
+                </div>
+            </div>
+
+            <!-- 问题10 -->
+            <div class="question">
+                <h3>10. 你选择饮品时最看重？</h3>
+                <div class="options">
+                    <label><input type="radio" name="question10" value="A" required> A. 口感丰富，层次分明</label>
+                    <label><input type="radio" name="question10" value="B"> B. 健康天然，低糖低卡</label>
+                    <label><input type="radio" name="question10" value="C"> C. 颜值高，适合拍照</label>
+                    <label><input type="radio" name="question10" value="D"> D. 经典口味，稳定品质</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">🌿 生成我的饮品报告</button>
+        </form>
+
+        <div class="result" id="resultSection">
+            <h2>🎉 你的专属奈雪推荐</h2>
+            <div class="tea-image" id="teaEmoji">🍵</div>
+            <div id="teaResult"></div>
+            <div class="match-score">匹配度: <span id="matchScore">0</span>%</div>
+            <div class="personality-traits" id="personalityTraits"></div>
+            <div class="tea-description" id="teaDescription"></div>
+            <button class="restart-btn" onclick="restartTest()">再测一次</button>
+        </div>
+    </div>
+
+    <script>
+        // 更新进度条和问题计数器
+        function updateProgress() {
+            const questions = document.querySelectorAll('.question');
+            const progressBar = document.getElementById('progressBar');
+            const questionCounter = document.getElementById('questionCounter');
+            
+            let answeredCount = 0;
+            questions.forEach(question => {
+                const inputs = question.querySelectorAll('input[type="radio"]');
+                const isAnswered = Array.from(inputs).some(input => input.checked);
+                if (isAnswered) answeredCount++;
+            });
+            
+            const progressPercentage = (answeredCount / questions.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            questionCounter.textContent = `已完成: ${answeredCount}/${questions.length}`;
+        }
+
+        // 添加事件监听器以更新进度
+        document.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.addEventListener('change', updateProgress);
+        });
+
+        // 初始化进度
+        updateProgress();
+
+        // 奈雪经典饮品数据
+        const teaPersonalityMap = {
+            "霸气芝士草莓": {
+                "emoji": "🍓🧀",
+                "personality": ["时尚", "甜美", "迷人", "创意"],
+                "description": "新鲜草莓+芝士奶盖，酸甜可口，奶香浓郁，奈雪招牌产品！"
+            },
+            "霸气橙子": {
+                "emoji": "🍊",
+                "personality": ["阳光", "活力", "健康", "积极"],
+                "description": "茉莉初雪茶底+赣南脐橙，VC丰富，清爽解渴，经典果茶！"
+            },
+            "杨枝甘露": {
+                "emoji": "🥭",
+                "personality": ["丰富", "层次", "温暖", "包容"],
+                "description": "芒果与西柚的经典组合，口感丰富，奈雪必点饮品！"
+            },
+            "茉莉初雪": {
+                "emoji": "🌸",
+                "personality": ["优雅", "清新", "知性", "简约"],
+                "description": "淡雅茉莉花茶，清香不甜腻，回归本真味道～"
+            },
+            "金色山脉珍珠奶茶": {
+                "emoji": "🧋",
+                "personality": ["温柔", "体贴", "怀旧", "稳重"],
+                "description": "金色山脉红茶+鲜奶+黑糖珍珠，经典搭配，温暖治愈～"
+            },
+            "芋泥宝藏茶": {
+                "emoji": "🍠",
+                "personality": ["温暖", "贴心", "细腻", "包容"],
+                "description": "绵密芋泥+鲜奶+芋圆，口感丰富，冬日暖心首选！"
+            },
+            "浓抹干酪香水椰": {
+                "emoji": "🍵🥥",
+                "personality": ["创新", "独特", "前卫", "时尚"],
+                "description": "奈雪Green店招牌，抹茶与椰子的创新结合，口感层次丰富！"
+            },
+            "超能牛油果酸奶昔": {
+                "emoji": "🥑",
+                "personality": ["健康", "营养", "活力", "积极"],
+                "description": "健康营养，牛油果与酸奶的完美搭配，补充每日能量！"
+            },
+            "多肉葡萄": {
+                "emoji": "🍇",
+                "personality": ["活力", "阳光", "积极", "健康"],
+                "description": "多肉葡萄果肉+茶底，VC满满，果肉丰富，奈雪经典！"
+            },
+            "香柚抹茶冰奶": {
+                "emoji": "🍊🍵",
+                "personality": ["创新", "独特", "清新", "时尚"],
+                "description": "奈雪新品，柚子与抹茶的创新组合，清新爽口！"
+            },
+            "尔滨列巴宝藏茶": {
+                "emoji": "🍞",
+                "personality": ["传统", "文化", "温暖", "怀旧"],
+                "description": "地域特色产品，东北风味奶茶，温暖有料！"
+            },
+            "米布宝藏茶": {
+                "emoji": "🍚",
+                "personality": ["健康", "温暖", "细腻", "传统"],
+                "description": "云南特色，米布与奶茶的结合，温暖有料的健康饮品！"
+            }
+        };
+
+        // 提交测试
+        document.getElementById('personalityTest').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 收集所有答案
+            const answers = {};
+            let allAnswered = true;
+            
+            for (let i = 1; i <= 10; i++) {
+                const selected = document.querySelector(`input[name="question${i}"]:checked`);
+                if (selected) {
+                    answers[i] = selected.value;
+                } else {
+                    allAnswered = false;
+                    // 高亮显示未回答的问题
+                    document.querySelector(`.question:nth-child(${i+2})`).style.borderColor = '#ff6b6b';
+                }
+            }
+            
+            if (!allAnswered) {
+                alert('请回答所有问题后再提交！');
+                return;
+            }
+
+            // 计算推荐结果
+            const result = calculateTeaRecommendation(answers);
+            
+            // 显示结果
+            showResult(result);
+        });
+
+        // 计算奶茶推荐
+        function calculateTeaRecommendation(answers) {
+            const personalityScores = {
+                "活泼": 0, "热情": 0, "外向": 0, "乐观": 0,
+                "阳光": 0, "活力": 0, "健康": 0, "积极": 0,
+                "温柔": 0, "体贴": 0, "怀旧": 0, "稳重": 0,
+                "优雅": 0, "精致": 0, "成熟": 0, "知性": 0,
+                "浪漫": 0, "创意": 0, "感性": 0, "独特": 0,
+                "时尚": 0, "甜美": 0, "迷人": 0, "可爱": 0,
+                "经典": 0, "传统": 0, "文化": 0, "内涵": 0,
+                "创新": 0, "大胆": 0, "前卫": 0, "自然": 0
+            };
+
+            // 根据答案计算分数
+            Object.entries(answers).forEach(([qId, answer]) => {
+                const scoreMap = {
+                    '1': { 'A': ["活泼", "外向"], 'B': ["活力", "健康"], 'C': ["稳重", "温柔"], 'D': ["精致", "独特"] },
+                    '2': { 'A': ["热情", "乐观"], 'B': ["健康", "积极"], 'C': ["体贴", "怀旧"], 'D': ["时尚", "精致"] },
+                    '3': { 'A': ["外向", "活泼"], 'B': ["自然", "活力"], 'C': ["文化", "内涵"], 'D': ["时尚", "创新"] },
+                    '4': { 'A': ["热情", "活力"], 'B': ["积极", "阳光"], 'C': ["温柔", "体贴"], 'D': ["优雅", "精致"] },
+                    '5': { 'A': ["创新", "前卫"], 'B': ["健康", "自然"], 'C': ["温柔", "感性"], 'D': ["时尚", "迷人"] }, // 修复了这里的语法错误
+                    '6': { 'A': ["高效", "直接"], 'B': ["稳重", "细致"], 'C': ["创意", "独特"], 'D': ["体贴", "合作"] },
+                    '7': { 'A': ["热情", "活力"], 'B': ["自然", "清新"], 'C': ["浪漫", "甜美"], 'D': ["经典", "简约"] },
+                    '8': { 'A': ["勇敢", "积极"], 'B': ["稳重", "理性"], 'C': ["合作", "体贴"], 'D': ["灵活", "创意"] },
+                    '9': { 'A': ["外向", "热情"], 'B': ["内向", "稳重"], 'C': ["创意", "好奇"], 'D': ["温柔", "家庭"] },
+                    '10': { 'A': ["丰富", "层次"], 'B': ["健康", "自然"], 'C': ["时尚", "颜值"], 'D': ["经典", "稳定"] }
+                };
+
+                if (scoreMap[qId] && scoreMap[qId][answer]) {
+                    scoreMap[qId][answer].forEach(trait => {
+                        personalityScores[trait] += 2;
+                    });
+                }
+            });
+
+            // 找出最高分特质
+            const maxScore = Math.max(...Object.values(personalityScores));
+            const dominantPersonality = Object.entries(personalityScores)
+                .filter(([_, score]) => score >= maxScore - 1)
+                .map(([trait]) => trait);
+
+            // 计算最适合的奶茶
+            let bestMatch = null;
+            let bestScore = 0;
+
+            Object.entries(teaPersonalityMap).forEach(([teaName, teaInfo]) => {
+                const matchScore = teaInfo.personality.filter(trait => 
+                    dominantPersonality.includes(trait)
+                ).length * 15 + Math.random() * 25;
+
+                if (matchScore > bestScore) {
+                    bestScore = matchScore;
+                    bestMatch = {
+                        teaName,
+                        ...teaInfo,
+                        personality: dominantPersonality.slice(0, 4),
+                        matchScore: Math.min(98, Math.round(bestScore))
+                    };
+                }
+            });
+
+            return bestMatch || {
+                teaName: "霸气芝士草莓",
+                emoji: "🍓🧀",
+                personality: ["神秘", "独特"],
+                description: "新鲜草莓+芝士奶盖，酸甜可口，奶香浓郁，奈雪招牌产品！",
+                matchScore: 85
+            };
+        }
+
+        // 显示结果
+        function showResult(result) {
+            document.getElementById('teaEmoji').textContent = result.emoji;
+            document.getElementById('teaResult').innerHTML = `<h3 style="color:#2e7d32;font-size:28px;">${result.teaName}</h3>`;
+            document.getElementById('matchScore').textContent = result.matchScore;
+            document.getElementById('teaDescription').textContent = result.description;
+            
+            // 显示性格特质
+            const traitsContainer = document.getElementById('personalityTraits');
+            traitsContainer.innerHTML = '';
+            result.personality.forEach(trait => {
+                traitsContainer.innerHTML += `<span class="trait">${trait}</span>`;
+            });
+            
+            // 显示结果区域
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // 平滑滚动到结果
+            document.getElementById('resultSection').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 重新测试
+        function restartTest() {
+            document.getElementById('personalityTest').reset();
+            document.getElementById('resultSection').style.display = 'none';
+            
+            // 重置问题边框颜色
+            document.querySelectorAll('.question').forEach(q => {
+                q.style.borderColor = '#4caf50';
+            });
+            
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
